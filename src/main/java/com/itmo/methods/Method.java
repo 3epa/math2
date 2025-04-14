@@ -1,5 +1,7 @@
 package com.itmo.methods;
 
+import org.apache.commons.math3.analysis.UnivariateFunction;
+
 public abstract class Method {
     private double epsilon;
 
@@ -7,13 +9,13 @@ public abstract class Method {
         this.epsilon = epsilon;
     }
 
-    public abstract void solve();
+    public abstract double solve(double start, double end, UnivariateFunction function);
 
-    public boolean check(double left, double right, Function function) {
-        return function.execute(left) * function.execute(right) < 0;
+    protected boolean check(double left, double right, UnivariateFunction function) {
+        return function.value(left) * function.value(right) > 0;
     }
 
-    public boolean isSolved(double x1, double x2) {
-        return Math.abs(x1 - x2) < epsilon;
+    protected boolean isSolved(double x1, double x2) {
+        return Math.abs(x1 - x2) <= epsilon;
     }
 }
