@@ -15,7 +15,7 @@ public abstract class Method {
     public abstract double solve(double a, double b);
 
     protected boolean check(double a, double b) {
-        return f.apply(a) * f.apply(b) > 0;
+        return f.apply(a) * f.apply(b) < 0;
     }
 
     protected boolean isSolved(double x1, double x2) {
