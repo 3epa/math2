@@ -1,18 +1,21 @@
 package com.itmo.methods;
 
-import org.apache.commons.math3.analysis.UnivariateFunction;
+import java.util.function.Function;
 
 public abstract class Method {
-    private double epsilon;
+    protected final double epsilon;
 
-    public Method(double epsilon) {
+    protected Function<Double, Double> f;
+
+    public Method(double epsilon, Function<Double, Double> f) {
         this.epsilon = epsilon;
+        this.f = f;
     }
 
-    public abstract double solve(double start, double end, UnivariateFunction function);
+    public abstract double solve(double a, double b);
 
-    protected boolean check(double left, double right, UnivariateFunction function) {
-        return function.value(left) * function.value(right) > 0;
+    protected boolean check(double a, double b) {
+        return f.apply(a) * f.apply(b) > 0;
     }
 
     protected boolean isSolved(double x1, double x2) {

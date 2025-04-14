@@ -1,22 +1,67 @@
 package com.itmo.methods;
 
-import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiator;
-import org.apache.commons.math3.analysis.differentiation.UnivariateFunctionDifferentiator;
+import java.util.function.Function;
 
 public class NewtonMethod extends Method {
 
-    public NewtonMethod(double epsilon) {
-        super(epsilon);
+    private final Function<Double, Double> df;
+    private final Function<Double, Double> d2f;
+
+    public NewtonMethod(double epsilon, Function<Double, Double> function, Function<Double, Double> df, Function<Double, Double> d2f) {
+        super(epsilon, function);
+        this.df = df;
+        this.d2f = d2f;
     }
 
     @Override
-    public double solve(double start, double end, UnivariateFunction function) {
-        UnivariateFunctionDifferentiator differentiator = new FiniteDifferencesDifferentiator(7, 0.01);
+    public double solve(double a, double b) {
+        if (!check(a, b)) {
+            return 1;
+        }
+        double x = choose(a, b);
+        double xPrev;
+        do {
+            xPrev = x;
+            x = xPrev - f.apply(xPrev) / df.apply(x);
+        } while (!isSolved(x,xPrev));
+        return x;
+    }
 
-        UnivariateFunction derivative = differentiator.differentiate(function);
+    private double choose(double a, double b) {
+        if (f.apply(a) * d2f.apply(a) > 0) {
+            return a;
+        }
+        return b;
+    }
 
-        return derivative.value(start);
+    @Override
+    protected boolean check(double a, double b) {
+        return checkSignConsistency(f, a, b) && checkFunctionNonZero(df, a, b);
+    }
+
+    private boolean checkSignConsistency(Function<Double, Double> function, double a, double b) {
+        double firstSign = Math.signum(function.apply(a));
+
+        for (double x = a; x < b; x += epsilon) {
+
+            double currentSign = Math.signum(function.apply(x));
+
+            if (currentSign != firstSign) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkFunctionNonZero(Function<Double, Double> function, double a, double b) {
+
+        for (double x = a; x < b; x += epsilon) {
+
+            if (Math.abs(function.apply(x)) < 1e-12) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
