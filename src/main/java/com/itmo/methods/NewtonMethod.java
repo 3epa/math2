@@ -36,14 +36,13 @@ public class NewtonMethod extends Method {
 
     @Override
     protected boolean check(double a, double b) {
-        return checkSignConsistency(f, a, b) && checkFunctionNonZero(df, a, b);
+        return super.check(a,b) && checkSignConsistency(df, a, b) && checkSignConsistency(d2f, a,b) && checkFunctionNonZero(df, a, b);
     }
 
     private boolean checkSignConsistency(Function<Double, Double> function, double a, double b) {
         double firstSign = Math.signum(function.apply(a));
 
         for (double x = a; x < b; x += epsilon) {
-
             double currentSign = Math.signum(function.apply(x));
 
             if (currentSign != firstSign) {
