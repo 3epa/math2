@@ -1,6 +1,7 @@
 package com.itmo.methods;
 
 import com.itmo.IncorrectInputException;
+import com.itmo.IterationResult;
 
 import java.util.function.Function;
 
@@ -16,7 +17,7 @@ public abstract class Method {
         this.f = f;
     }
 
-    public abstract double solve(double a, double b) throws IncorrectInputException;
+    public abstract IterationResult solve(double a, double b) throws IncorrectInputException;
 
     protected void check(double a, double b) throws IncorrectInputException {
         double xPrev = a;

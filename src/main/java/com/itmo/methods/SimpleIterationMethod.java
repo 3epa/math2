@@ -2,6 +2,7 @@ package com.itmo.methods;
 
 import com.itmo.FunctionHolder;
 import com.itmo.IncorrectInputException;
+import com.itmo.IterationResult;
 import com.itmo.MathUtils;
 
 import java.util.function.Function;
@@ -19,7 +20,7 @@ public class SimpleIterationMethod extends Method {
     }
 
     @Override
-    public double solve(double a, double b) throws IncorrectInputException {
+    public IterationResult solve(double a, double b) throws IncorrectInputException {
         Function<Double, Double> phi = x -> x - MathUtils.getFunctionSign(df, epsilon, a, b) * findLipschitzCoefficient(a, b) * f.apply(x);
         check(a,b, phi);
         double x = a;
@@ -34,7 +35,7 @@ public class SimpleIterationMethod extends Method {
                 throw new IncorrectInputException("Метод не сошёлся за разумное количество итераций.");
             }
         } while (!isSolved(x,xPrev));
-        return x;
+        return new IterationResult(iterations + 1, x, f.apply(x));
     }
 
     protected void check(double a, double b, Function<Double, Double> phi ) throws IncorrectInputException {

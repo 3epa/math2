@@ -2,6 +2,7 @@ package com.itmo.methods;
 
 import com.itmo.FunctionHolder;
 import com.itmo.IncorrectInputException;
+import com.itmo.IterationResult;
 import com.itmo.MathUtils;
 
 import java.util.function.Function;
@@ -18,7 +19,7 @@ public class NewtonMethod extends Method {
     }
 
     @Override
-    public double solve(double a, double b) throws IncorrectInputException {
+    public IterationResult solve(double a, double b) throws IncorrectInputException {
         check(a,b);
         double x = choose(a, b);
         double xPrev;
@@ -31,7 +32,7 @@ public class NewtonMethod extends Method {
                 throw new IncorrectInputException("Метод не сошёлся за разумное количество итераций.");
             }
         } while (!isSolved(x,xPrev));
-        return x;
+        return new IterationResult(iterations + 1, x, f.apply(x));
     }
 
     private double choose(double a, double b) {
