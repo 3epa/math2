@@ -10,22 +10,25 @@ public class NewtonMethod extends Method {
     private final Function<Double, Double> df;
     private final Function<Double, Double> d2f;
 
-    public NewtonMethod(double epsilon, FunctionHolder functionHolder) {
-        super(epsilon, functionHolder.getF());
+    public NewtonMethod(double epsilon, int MAX_ITERATIONS, FunctionHolder functionHolder) {
+        super(epsilon, MAX_ITERATIONS ,functionHolder.getF());
         this.df = functionHolder.getDf();
         this.d2f = functionHolder.getD2f();
     }
 
     @Override
     public double solve(double a, double b) {
-        if (!check(a, b)) {
-            return 1;
-        }
+        check(a,b);
         double x = choose(a, b);
         double xPrev;
+        int iterations = 0;
         do {
             xPrev = x;
             x = xPrev - f.apply(xPrev) / df.apply(x);
+            iterations++;
+            if (iterations > MAX_ITERATIONS) {
+                throw new ArithmeticException("Метод не сошёлся за разумное количество итераций.");
+            }
         } while (!isSolved(x,xPrev));
         return x;
     }
@@ -36,22 +39,4 @@ public class NewtonMethod extends Method {
         }
         return b;
     }
-
-    @Override
-    protected boolean check(double a, double b) {
-        return super.check(a,b) && MathUtils.checkSignConsistency(df, epsilon, a, b) && MathUtils.checkSignConsistency(d2f, epsilon, a,b)&& checkFunctionNonZero(df, a, b);
-    }
-
-
-    private boolean checkFunctionNonZero(Function<Double, Double> function, double a, double b) {
-
-        for (double x = a; x < b; x += epsilon) {
-
-            if (Math.abs(function.apply(x)) < 1e-12) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 }

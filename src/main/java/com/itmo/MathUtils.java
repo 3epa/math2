@@ -3,17 +3,12 @@ package com.itmo;
 import java.util.function.Function;
 
 public class MathUtils {
-    public static boolean checkSignConsistency(Function<Double, Double> function, double epsilon, double a, double b) {
-        double firstSign = Math.signum(function.apply(a));
-
+    public static double findMaxFunction(Function<Double, Double> function, double epsilon, double a, double b) {
+        double max = 0;
         for (double x = a; x < b; x += epsilon) {
-            double currentSign = Math.signum(function.apply(x));
-
-            if (currentSign != firstSign) {
-                return false;
-            }
+            max = Math.max(max, Math.abs(function.apply(x)));
         }
-        return true;
+        return max;
     }
     public static double getFunctionSign(Function<Double, Double> function, double epsilon, double a, double b) {
         double firstSign = Math.signum(function.apply(a));
@@ -22,7 +17,7 @@ public class MathUtils {
             double currentSign = Math.signum(function.apply(x));
 
             if (currentSign != firstSign) {
-                return 0;
+                throw new ArithmeticException("Функция меняет знак в указанном диапазоне");
             }
         }
         return firstSign;
