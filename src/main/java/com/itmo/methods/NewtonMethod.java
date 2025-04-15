@@ -1,9 +1,8 @@
 package com.itmo.methods;
 
-import com.itmo.FunctionHolder;
-import com.itmo.IncorrectInputException;
-import com.itmo.IterationResult;
-import com.itmo.MathUtils;
+import com.itmo.DTO.FunctionHolder;
+import com.itmo.exceptions.IncorrectInputException;
+import com.itmo.DTO.IterationResult;
 
 import java.util.function.Function;
 

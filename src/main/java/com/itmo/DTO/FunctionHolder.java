@@ -1,4 +1,4 @@
-package com.itmo;
+package com.itmo.DTO;
 
 import java.util.function.Function;
 

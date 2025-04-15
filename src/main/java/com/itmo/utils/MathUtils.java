@@ -1,4 +1,4 @@
-package com.itmo;
+package com.itmo.utils;
 
 import java.util.function.Function;
 

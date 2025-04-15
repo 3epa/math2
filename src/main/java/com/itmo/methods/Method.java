@@ -1,7 +1,7 @@
 package com.itmo.methods;
 
-import com.itmo.IncorrectInputException;
-import com.itmo.IterationResult;
+import com.itmo.exceptions.IncorrectInputException;
+import com.itmo.DTO.IterationResult;
 
 import java.util.function.Function;
 

@@ -1,4 +1,4 @@
-package com.itmo;
+package com.itmo.DTO;
 
 public class IterationResult {
     private final int iteration;
