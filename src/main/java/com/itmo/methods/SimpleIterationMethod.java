@@ -1,13 +1,16 @@
 package com.itmo.methods;
 
+import com.itmo.FunctionHolder;
+import com.itmo.MathUtils;
+
 import java.util.function.Function;
 
 public class SimpleIterationMethod extends Method {
     private final Function<Double, Double> df;
 
-    public SimpleIterationMethod(double epsilon, Function<Double, Double> f, Function<Double, Double> df) {
-        super(epsilon, f);
-        this.df = df;
+    public SimpleIterationMethod(double epsilon, FunctionHolder functionHolder) {
+        super(epsilon, functionHolder.getF());
+        this.df = functionHolder.getDf();
     }
 
     private double findLipschitzCoefficient(double a, double b) {
