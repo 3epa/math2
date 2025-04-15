@@ -1,5 +1,8 @@
 package com.itmo.methods;
 
+import com.itmo.FunctionHolder;
+import com.itmo.MathUtils;
+
 import java.util.function.Function;
 
 public class NewtonMethod extends Method {
@@ -7,10 +10,10 @@ public class NewtonMethod extends Method {
     private final Function<Double, Double> df;
     private final Function<Double, Double> d2f;
 
-    public NewtonMethod(double epsilon, Function<Double, Double> function, Function<Double, Double> df, Function<Double, Double> d2f) {
-        super(epsilon, function);
-        this.df = df;
-        this.d2f = d2f;
+    public NewtonMethod(double epsilon, FunctionHolder functionHolder) {
+        super(epsilon, functionHolder.getF());
+        this.df = functionHolder.getDf();
+        this.d2f = functionHolder.getD2f();
     }
 
     @Override
