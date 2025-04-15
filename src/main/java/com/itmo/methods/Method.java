@@ -1,5 +1,7 @@
 package com.itmo.methods;
 
+import com.itmo.IncorrectInputException;
+
 import java.util.function.Function;
 
 public abstract class Method {
@@ -14,26 +16,26 @@ public abstract class Method {
         this.f = f;
     }
 
-    public abstract double solve(double a, double b);
+    public abstract double solve(double a, double b) throws IncorrectInputException;
 
-    protected void check(double a, double b) {
-        if (f.apply(a) * f.apply(b) > 0) {
-            throw new ArithmeticException("На данном интервале отсутствует корень уравнения");
-        }
+    protected void check(double a, double b) throws IncorrectInputException {
         double xPrev = a;
         boolean flag = false;
         for (double x = a + epsilon; x < b; x += epsilon) {
             if (f.apply(x) * f.apply(xPrev) < 0) {
                 if (flag) {
-                    throw new ArithmeticException("На данном интервале несколько корней уравнения");
+                    throw new IncorrectInputException("На данном интервале несколько корней уравнения");
                 }
                 flag = true;
             }
             xPrev = x;
         }
+        if (!flag) {
+            throw new IncorrectInputException("На данном интервале отсутствует корень уравнения");
+        }
     }
 
     protected boolean isSolved(double x1, double x2) {
-        return Math.abs(x1 - x2) <= epsilon;
+        return Math.abs(x1 - x2) <= epsilon || Math.abs(f.apply(x1)) <= epsilon || Math.abs(f.apply(x2)) <= epsilon;
     }
 }

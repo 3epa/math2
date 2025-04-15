@@ -1,6 +1,7 @@
 package com.itmo.methods;
 
 import com.itmo.FunctionHolder;
+import com.itmo.IncorrectInputException;
 
 
 public class ChordMethod extends Method {
@@ -10,7 +11,7 @@ public class ChordMethod extends Method {
     }
 
     @Override
-    public double solve(double a, double b) {
+    public double solve(double a, double b) throws IncorrectInputException   {
         check(a,b);
         double x0 = a;
         double x1 = b;
@@ -27,7 +28,7 @@ public class ChordMethod extends Method {
             }
             iterations++;
             if (iterations > MAX_ITERATIONS) {
-                throw new ArithmeticException("Метод не сошёлся за разумное количество итераций.");
+                throw new IncorrectInputException("Метод не сошёлся за разумное количество итераций.");
             }
         } while (!isSolved(x0, x1));
         return xNew;

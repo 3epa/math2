@@ -1,6 +1,7 @@
 package com.itmo.methods;
 
 import com.itmo.FunctionHolder;
+import com.itmo.IncorrectInputException;
 import com.itmo.MathUtils;
 
 import java.util.function.Function;
@@ -17,7 +18,7 @@ public class NewtonMethod extends Method {
     }
 
     @Override
-    public double solve(double a, double b) {
+    public double solve(double a, double b) throws IncorrectInputException {
         check(a,b);
         double x = choose(a, b);
         double xPrev;
@@ -27,7 +28,7 @@ public class NewtonMethod extends Method {
             x = xPrev - f.apply(xPrev) / df.apply(x);
             iterations++;
             if (iterations > MAX_ITERATIONS) {
-                throw new ArithmeticException("Метод не сошёлся за разумное количество итераций.");
+                throw new IncorrectInputException("Метод не сошёлся за разумное количество итераций.");
             }
         } while (!isSolved(x,xPrev));
         return x;
