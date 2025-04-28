@@ -21,7 +21,12 @@ public class SimpleIterationMethod extends Method {
 
     @Override
     public IterationResult solve(double a, double b) throws IncorrectInputException {
-        Function<Double, Double> phi = x -> x - MathUtils.getFunctionSign(df, epsilon, a, b) * findLipschitzCoefficient(a, b) * f.apply(x);
+        Function<Double, Double> phi;
+        try {
+            phi = x -> x - MathUtils.getFunctionSign(df, epsilon, a, b) * findLipschitzCoefficient(a, b) * f.apply(x);
+        } catch (ArithmeticException e) {
+            throw new IncorrectInputException("Не удалось вычислить функцию phi, потому что производная " + e.getMessage().toLowerCase());
+        }
         check(a,b, phi);
         double x = a;
         double xPrev;
@@ -41,8 +46,7 @@ public class SimpleIterationMethod extends Method {
     protected void check(double a, double b, Function<Double, Double> phi ) throws IncorrectInputException {
         super.check(a,b);
         Function<Double, Double> dPhi = x -> 1 - MathUtils.getFunctionSign(df, epsilon, a, b) * findLipschitzCoefficient(a, b) * df.apply(x);
-        if (MathUtils.findMaxFunction(dPhi, epsilon, a, b) >= 1) {
-            System.out.println(MathUtils.findMaxFunction(phi, epsilon, a, b));
+        if (MathUtils.findMaxFunction(dPhi, epsilon, a, b) >= 0.9) {
             throw new IncorrectInputException("Не выполняется условие сходимости метода");
         }
     }
