@@ -15,22 +15,6 @@ public class SystemIterationResult implements SolutionResult {
         this.dX = dX;
     }
 
-    public Double[] getfValue() {
-        return fValue;
-    }
-
-    public Double[] getdX() {
-        return dX;
-    }
-
-    public int getIteration() {
-        return iteration;
-    }
-
-    public Double[] getX() {
-        return x;
-    }
-
     @Override
     public String getFormattedResult() {
         DecimalFormat df = new DecimalFormat("0.######");

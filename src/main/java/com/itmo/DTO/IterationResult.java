@@ -13,18 +13,6 @@ public class IterationResult implements SolutionResult {
         this.fValue = fValue;
     }
 
-    public int getIteration() {
-        return iteration;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getFValue() {
-        return fValue;
-    }
-
     @Override
     public String getFormattedResult() {
         DecimalFormat df = new DecimalFormat("0.######");

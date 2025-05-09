@@ -17,6 +17,7 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class MainGUI extends JFrame {
     private JComboBox<String> systemComboBox;
@@ -26,13 +27,10 @@ public class MainGUI extends JFrame {
     private JTextField xRightField;
     private JTextField yLeftField;
     private JTextField yRightField;
-    private JTextArea resultArea;
+    private final JTextArea resultArea;
     private JTextField epsilonField;
-    private JPanel chartPanel;
-    private JButton solveButton;
-    private JButton saveToFileButton;
+    private final JPanel chartPanel;
     private String lastResult = "";
-    private JButton drawGraphButton;
     private JTextField xInitApproximationField;
     private JTextField yInitApproximationField;
 
@@ -162,15 +160,15 @@ public class MainGUI extends JFrame {
 
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        solveButton = new JButton("Решить");
+        JButton solveButton = new JButton("Решить");
         solveButton.addActionListener(new SolveButtonListener());
         buttonPanel.add(solveButton);
 
-        saveToFileButton = new JButton("Сохранить в файл");
+        JButton saveToFileButton = new JButton("Сохранить в файл");
         saveToFileButton.addActionListener(new SaveToFileListener());
         buttonPanel.add(saveToFileButton);
 
-        drawGraphButton = new JButton("Нарисовать график");
+        JButton drawGraphButton = new JButton("Нарисовать график");
         drawGraphButton.addActionListener(new UpdateChartListener());
         buttonPanel.add(drawGraphButton);
         return buttonPanel;
@@ -463,7 +461,7 @@ public class MainGUI extends JFrame {
                     .append(methodComboBox.getSelectedItem())
                     .append("\n");
 
-            String functionInfo = functionComboBox.getSelectedItem().toString()
+            String functionInfo = Objects.requireNonNull(functionComboBox.getSelectedItem()).toString()
                     .replace("<html>", "")
                     .replace("</html>", "")
                     .replace("<br>", "\n");

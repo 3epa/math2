@@ -60,10 +60,10 @@ public class SystemSimpleIterationMethod {
     }
 
     private void check(double[][] bounds) throws IncorrectInputException {
-        for (int i = 0; i < dPhi.length; i++) {
+        for (Function<Double[], Double>[] functions : dPhi) {
             double q = 0.0;
             for (int j = 0; j < dPhi.length; j++) {
-                q += MathUtils.findMaxNFunction(dPhi[i][j], epsilon, bounds);
+                q += MathUtils.findMaxNFunction(functions[j], epsilon, bounds);
             }
             if (q >= 1) {
                 throw new IncorrectInputException("Не выполняется условие сходимости метода");
@@ -72,8 +72,8 @@ public class SystemSimpleIterationMethod {
     }
 
     private boolean isSolved(Double[][] dX) {
-        for (int i = 0; i < dX.length; i++) {
-            if (Math.abs(dX[i][0] - dX[i][1]) > epsilon) {
+        for (Double[] x : dX) {
+            if (Math.abs(x[0] - x[1]) > epsilon) {
                 return false;
             }
         }
