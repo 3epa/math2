@@ -12,14 +12,14 @@ public class NewtonMethod extends Method {
     private final Function<Double, Double> d2f;
 
     public NewtonMethod(double epsilon, int MAX_ITERATIONS, FunctionHolder functionHolder) {
-        super(epsilon, MAX_ITERATIONS ,functionHolder.getF());
+        super(epsilon, MAX_ITERATIONS, functionHolder.getF());
         this.df = functionHolder.getDf();
         this.d2f = functionHolder.getD2f();
     }
 
     @Override
     public IterationResult solve(double a, double b) throws IncorrectInputException {
-        check(a,b);
+        check(a, b);
         double x = choose(a, b);
         double xPrev;
         int iterations = 0;
@@ -30,7 +30,7 @@ public class NewtonMethod extends Method {
             if (iterations > MAX_ITERATIONS) {
                 throw new IncorrectInputException("Метод не сошёлся за разумное количество итераций.");
             }
-        } while (!isSolved(x,xPrev));
+        } while (!isSolved(x, xPrev));
         return new IterationResult(iterations + 1, x, f.apply(x));
     }
 
