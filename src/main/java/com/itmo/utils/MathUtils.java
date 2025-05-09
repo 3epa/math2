@@ -11,6 +11,29 @@ public class MathUtils {
         return max;
     }
     public static double getFunctionSign(Function<Double, Double> function, double epsilon, double a, double b) {
+
+    public static double findMaxNFunction(Function<Double[], Double> function, double epsilon, double[][] bounds) {
+        int dimensions = bounds.length;
+        Double[] currentPoint = new Double[dimensions];
+        double max = Double.NEGATIVE_INFINITY;
+        return searchMax(function, epsilon, bounds, 0, max, currentPoint);
+    }
+
+    private static double searchMax(Function<Double[], Double> function, double epsilon, double[][] bounds, int currentDim, double currentMax, Double[] currentPoint) {
+        if (currentDim == bounds.length) {
+            double value = Math.abs(function.apply(currentPoint));
+            return Math.max(currentMax, value);
+        }
+        double max = currentMax;
+        double current = bounds[currentDim][0];
+        while (current <= bounds[currentDim][1]) {
+            currentPoint[currentDim] = current;
+            max = searchMax(function, epsilon, bounds, currentDim + 1, max, currentPoint);
+            current += epsilon;
+        }
+        return max;
+    }
+
         double firstSign = Math.signum(function.apply(a));
 
         for (double x = a; x < b; x += epsilon) {
