@@ -19,6 +19,26 @@ public class SimpleIterationMethod extends Method {
         return 1/MathUtils.findMaxFunction(df, epsilon, a, b);
     }
 
+    private Function<Double, Double> phi(double a, double b) throws IncorrectInputException {
+        double sign;
+        try {
+            sign = MathUtils.getFunctionSign(df, epsilon, a, b);
+        } catch (IncorrectInputException e) {
+            throw new IncorrectInputException("Производная функции меняет знак на указанном диапазоне");
+        }
+        return x -> x - sign * findLipschitzCoefficient(a, b) * f.apply(x);
+    }
+
+    private Function<Double, Double> dPhi(double a, double b) throws IncorrectInputException {
+        double sign;
+        try {
+            sign = MathUtils.getFunctionSign(df, epsilon, a, b);
+        } catch (IncorrectInputException e) {
+            throw new IncorrectInputException("Производная функции меняет знак на указанном диапазоне");
+        }
+        return x -> 1 - sign * findLipschitzCoefficient(a, b) * df.apply(x);
+    }
+
     @Override
     public IterationResult solve(double a, double b) throws IncorrectInputException {
         Function<Double, Double> phi;
@@ -29,6 +49,7 @@ public class SimpleIterationMethod extends Method {
         }
         check(a,b, phi);
         double x = a;
+        Function<Double, Double> phi = phi(a, b);
         double xPrev;
 
         int iterations = 0;
@@ -47,6 +68,7 @@ public class SimpleIterationMethod extends Method {
         super.check(a,b);
         Function<Double, Double> dPhi = x -> 1 - MathUtils.getFunctionSign(df, epsilon, a, b) * findLipschitzCoefficient(a, b) * df.apply(x);
         if (MathUtils.findMaxFunction(dPhi, epsilon, a, b) >= 0.9) {
+        Function<Double, Double> dPhi = dPhi(a, b);
             throw new IncorrectInputException("Не выполняется условие сходимости метода");
         }
     }
