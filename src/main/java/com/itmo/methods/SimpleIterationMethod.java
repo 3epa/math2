@@ -9,6 +9,8 @@ import java.util.function.Function;
 
 public class SimpleIterationMethod extends Method {
     private final Function<Double, Double> df;
+    private final Function<Double, Double> d2f;
+    private Double q;
 
     public SimpleIterationMethod(double epsilon, int MAX_ITERATIONS, FunctionHolder functionHolder) {
         super(epsilon, MAX_ITERATIONS ,functionHolder.getF());
@@ -68,7 +70,12 @@ public class SimpleIterationMethod extends Method {
         super.check(a,b);
         Function<Double, Double> dPhi = x -> 1 - MathUtils.getFunctionSign(df, epsilon, a, b) * findLipschitzCoefficient(a, b) * df.apply(x);
         if (MathUtils.findMaxFunction(dPhi, epsilon, a, b) >= 0.9) {
+    @Override
+    protected void check(double a, double b) throws IncorrectInputException {
+        super.check(a, b);
         Function<Double, Double> dPhi = dPhi(a, b);
+        this.q = MathUtils.findMaxFunction(dPhi, epsilon, a, b);
+        if (this.q > 1) {
             throw new IncorrectInputException("Не выполняется условие сходимости метода");
         }
     }
