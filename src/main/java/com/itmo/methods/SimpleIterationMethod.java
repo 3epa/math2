@@ -13,12 +13,13 @@ public class SimpleIterationMethod extends Method {
     private Double q;
 
     public SimpleIterationMethod(double epsilon, int MAX_ITERATIONS, FunctionHolder functionHolder) {
-        super(epsilon, MAX_ITERATIONS ,functionHolder.getF());
+        super(epsilon, MAX_ITERATIONS, functionHolder.getF());
         this.df = functionHolder.getDf();
+        this.d2f = functionHolder.getD2f();
     }
 
     private double findLipschitzCoefficient(double a, double b) {
-        return 1/MathUtils.findMaxFunction(df, epsilon, a, b);
+        return 1 / MathUtils.findMaxFunction(df, epsilon, a, b);
     }
 
     private Function<Double, Double> phi(double a, double b) throws IncorrectInputException {
@@ -43,15 +44,9 @@ public class SimpleIterationMethod extends Method {
 
     @Override
     public IterationResult solve(double a, double b) throws IncorrectInputException {
-        Function<Double, Double> phi;
-        try {
-            phi = x -> x - MathUtils.getFunctionSign(df, epsilon, a, b) * findLipschitzCoefficient(a, b) * f.apply(x);
-        } catch (ArithmeticException e) {
-            throw new IncorrectInputException("Не удалось вычислить функцию phi, потому что производная " + e.getMessage().toLowerCase());
-        }
-        check(a,b, phi);
-        double x = a;
+        check(a, b);
         Function<Double, Double> phi = phi(a, b);
+        double x = choose(a, b);
         double xPrev;
 
         int iterations = 0;
@@ -62,14 +57,17 @@ public class SimpleIterationMethod extends Method {
             if (iterations > MAX_ITERATIONS) {
                 throw new IncorrectInputException("Метод не сошёлся за разумное количество итераций.");
             }
-        } while (!isSolved(x,xPrev));
+        } while (!isSolved(x, xPrev));
         return new IterationResult(iterations + 1, x, f.apply(x));
     }
 
-    protected void check(double a, double b, Function<Double, Double> phi ) throws IncorrectInputException {
-        super.check(a,b);
-        Function<Double, Double> dPhi = x -> 1 - MathUtils.getFunctionSign(df, epsilon, a, b) * findLipschitzCoefficient(a, b) * df.apply(x);
-        if (MathUtils.findMaxFunction(dPhi, epsilon, a, b) >= 0.9) {
+    private double choose(double a, double b) {
+        if (f.apply(a) * d2f.apply(a) > 0) {
+            return a;
+        }
+        return b;
+    }
+
     @Override
     protected boolean isSolved(double x1, double x2) {
         if (0 < q && q <= 0.5) {
