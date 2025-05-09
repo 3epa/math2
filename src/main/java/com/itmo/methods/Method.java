@@ -22,7 +22,7 @@ public abstract class Method {
     protected void check(double a, double b) throws IncorrectInputException {
         double xPrev = a;
         boolean flag = false;
-        for (double x = a + epsilon; x < b; x += epsilon) {
+        for (double x = a + epsilon; x <= b; x += epsilon) {
             if (f.apply(x) * f.apply(xPrev) < 0) {
                 if (flag) {
                     throw new IncorrectInputException("На данном интервале несколько корней уравнения");
@@ -37,6 +37,6 @@ public abstract class Method {
     }
 
     protected boolean isSolved(double x1, double x2) {
-        return Math.abs(x1 - x2) <= epsilon || Math.abs(f.apply(x1)) <= epsilon || Math.abs(f.apply(x2)) <= epsilon;
+        return Math.abs(x1 - x2) <= epsilon;
     }
 }
