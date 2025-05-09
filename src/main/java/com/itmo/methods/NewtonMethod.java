@@ -40,4 +40,9 @@ public class NewtonMethod extends Method {
         }
         return b;
     }
+
+    @Override
+    protected boolean isSolved(double x1, double x2) {
+        return super.isSolved(x1, x2) || Math.abs(f.apply(x1) / df.apply(x1)) <= epsilon || Math.abs(f.apply(x1)) <= epsilon;
+    }
 }
