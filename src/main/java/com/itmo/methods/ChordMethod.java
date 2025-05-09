@@ -31,7 +31,11 @@ public class ChordMethod extends Method {
             if (iterations > MAX_ITERATIONS) {
                 throw new IncorrectInputException("Метод не сошёлся за разумное количество итераций.");
             }
-        } while (!isSolved(x0, x1));
+        } while (!isSolved(x0, x1, xNew));
         return new IterationResult(iterations + 1, xNew, f.apply(xNew));
+    }
+
+    protected boolean isSolved(double x1, double x2, double xNew) {
+        return super.isSolved(x1, x2) || Math.abs(f.apply(xNew)) <= epsilon;
     }
 }
