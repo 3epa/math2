@@ -71,6 +71,15 @@ public class SimpleIterationMethod extends Method {
         Function<Double, Double> dPhi = x -> 1 - MathUtils.getFunctionSign(df, epsilon, a, b) * findLipschitzCoefficient(a, b) * df.apply(x);
         if (MathUtils.findMaxFunction(dPhi, epsilon, a, b) >= 0.9) {
     @Override
+    protected boolean isSolved(double x1, double x2) {
+        if (0 < q && q <= 0.5) {
+            return Math.abs(x1 - x2) <= epsilon || Math.abs(f.apply(x1)) < epsilon;
+        } else {
+            return Math.abs(x1 - x2) <= (1 - q) / q * epsilon || Math.abs(f.apply(x1)) < epsilon;
+        }
+    }
+
+    @Override
     protected void check(double a, double b) throws IncorrectInputException {
         super.check(a, b);
         Function<Double, Double> dPhi = dPhi(a, b);
